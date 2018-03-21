@@ -25,11 +25,51 @@ df2
 #add a facet wrap by year, and the bimodal distribtuion comes out in the year
 #not much variation between the years in the other fatty acids
 ggplot(data = df2, aes(x = measurement, fill = fatty.acid)) +  
-  geom_density(alpha=0.2) +
+  geom_histogram(alpha=0.2, colour="black") +
   scale_x_log10() +
   facet_wrap(~Year)
 
+df3<- df2 %>%
+  summarize(key = fatty.acid, value = measurement, -Year)
+
+df3 <- df2 %>% 
+  group_by(fatty.acid, Year) %>%
+  summarise(means=mean(measurement), sd=sd(measurement),
+            count = n())
+ggplot(data = df2, aes(x = fatty.acid, y = measurement)) +  
+  geom_col() +
+  geom_errorbar()
+  facet_wrap(~Year)
 
 
-ggplot(data = df2, aes(y = measurement, fill = fatty.acid)) +  
-  geom_point(alpha=0.2)
+#line and point graphs
+names(df)
+ggplot(data = df, aes(x = C17.0,  y = MOA)) + #look for the unique aspect of the data
+    geom_point() +
+    geom_smooth(method = "lm") +
+    facet_wrap(~Year, scales = "free_x")
+
+ggplot(data = df, aes(x = C17.0,  y = MNA)) + #look for the unique aspect of the data
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~Year, scales = "free_x")
+  
+ggplot(data = df, aes(x = C17.0,  y = EOA)) + #look for the unique aspect of the data
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~Year, scales = "free_x")
+
+
+
+#4. final plot
+df4<-df %>%
+  gather(key = fatty.acid, value = measurement, -Year, -C17.0)
+ggplot(data = df4, aes(x = C17.0,  y = measurement, color=fatty.acid)) + #look for the unique aspect of the data
+  geom_point() +
+  #geom_smooth(method = "loess") +
+  facet_wrap(~Year, scales = c("free_x") )+
+  geom_smooth(method ="lm") +
+  labs(x= "Amount of C17.0", y = "Amounts of other Fatty Acids", color ="Fatty Acid Type")+
+  theme_bw()
+
+
