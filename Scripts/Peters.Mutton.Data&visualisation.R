@@ -72,4 +72,4 @@ ggplot(data = df4, aes(x = C17.0,  y = measurement, color=fatty.acid)) + #look f
   labs(x= "Amount of C17.0", y = "Amounts of other Fatty Acids", color ="Fatty Acid Type")+
   theme_bw()
 
-
+#checking on Monday afternoon... Take 2
